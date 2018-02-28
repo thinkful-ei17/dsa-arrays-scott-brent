@@ -39,7 +39,6 @@ class Memory {
   }
 
   set(ptr, value) {
-    console.log("memory.set got called");
     this.memory[ptr] = value;
   }
 }

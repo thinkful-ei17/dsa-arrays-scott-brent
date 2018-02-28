@@ -35,16 +35,20 @@ class Array {
    
 
   get(index){
-      //check it's a valid index
+    //check it's a valid index
     const index2 = this.ptr + index;
     if( index2 < this.ptr || index2 > this.ptr + this.length - 1){
-          return new Error('Not a valid index');
-      }
+      return new Error('Not a valid index');
+    }
     //memory.get value at this.pointer + index
     return memory.get(this.ptr + index);
-}
+  }
 
-  pop(){}
+  pop(){
+    const poppedElement = this.get(this.length -1);
+    this.length--;
+    return poppedElement;
+  }
 
   insert(index, value){}
 
@@ -58,7 +62,14 @@ const test = new Array();
 test.push(75);
 test.push(76);
 test.push(77);
-console.log('should be 76', test.get(3));
+console.log('this is pop', test.pop());
+console.log(test.length);
+console.log('this is pop', test.pop());
+console.log(test.length);
+test.push(31);
+test.push(79);
+test.push(1);
+console.log('this is pop', test.pop());
 
 
 
