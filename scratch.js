@@ -7,7 +7,6 @@ class Array {
     this.length = 0;
     this._capacity = 0;
     this.ptr = memory.allocate(this.length);
-    this.counter = 0; 
   }
 
   push(value){
@@ -26,7 +25,6 @@ class Array {
    
    
   _resize(size){
-    this.counter++;
     this.ptr = memory.allocate(size * 3);
     if (this.ptr !== null) {
       this._capacity = size * 3;
@@ -63,6 +61,7 @@ test.push(75);
 test.push(76);
 test.push(77);
 console.log('this is pop', test.pop());
+console.log('get test', test.get(2));
 console.log(test.length);
 console.log('this is pop', test.pop());
 console.log(test.length);
