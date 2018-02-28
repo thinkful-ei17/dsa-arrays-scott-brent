@@ -13,8 +13,7 @@ class Memory {
 
     this.head += size;
     return start;
-  }
-
+  } 
   free(ptr) {}
 
   copy(toIdx, fromIdx, size) {
@@ -29,6 +28,7 @@ class Memory {
       }
     } else {
       // Iterate backwards
+
       for (let i = size - 1; i >= 0; i--) {
         this.set(toIdx + i, this.get(fromIdx + i));
       }
