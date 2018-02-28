@@ -10,7 +10,6 @@ class Memory {
     }
 
     const start = this.head;
-
     this.head += size;
     return start;
   } 
