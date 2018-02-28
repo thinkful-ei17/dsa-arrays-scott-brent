@@ -34,7 +34,15 @@ class Array {
   }
    
 
-  get(idex){}
+  get(index){
+      //check it's a valid index
+    const index2 = this.ptr + index;
+    if( index2 < this.ptr || index2 > this.ptr + this.length - 1){
+          return new Error('Not a valid index');
+      }
+    //memory.get value at this.pointer + index
+    return memory.get(this.ptr + index);
+}
 
   pop(){}
 
@@ -47,22 +55,10 @@ class Array {
 
 
 const test = new Array();
-console.log(test.push(75));
-console.log(test.push(76));
-console.log(test.push(77));
-console.log(test.push(78));
-console.log(test.push(79));
-console.log(test.push(74));
-console.log(test.push(75));
-console.log(test.push(76));
-console.log(test.push(77));
-console.log(test.push(78));
-console.log(test.push(79));
-console.log(test.push(74));
-console.log(test.push(75));
-console.log(test.push(76));
-console.log(test.push(77));
-console.log(test.push(78));
-console.log(test.push(79));
-console.log(test.push(74));
+test.push(75);
+test.push(76);
+test.push(77);
+console.log('should be 76', test.get(3));
+
+
 
