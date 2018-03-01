@@ -4,15 +4,18 @@ const memory = new Memory;
 
 class Array {
   constructor() {
-    this._sizeRatio = 2;
     this.length = 0;
     this._capacity = 0;
     this.ptr = memory.allocate(this.length);
   }
 
+  _sizeRatio(x){
+    return Math.floor(x + (x / 8) + (x < 9 ? 3 : 6));
+  }
+
   push(value) {
     if (this.length >= this._capacity) {
-      this._resize((this.length + 1) * this._sizeRatio);
+      this._resize(this._sizeRatio(this.length));
     }
     memory.set(this.ptr + this.length, value); 
     this.length++;
@@ -24,7 +27,7 @@ class Array {
     this.ptr = memory.allocate(size);
     if (this.ptr !== null) { 
       memory.copy(this.ptr, oldPtr, this.length);
-      this._capacity = size * this._sizeRatio;
+      this._capacity = size;
       memory.free(oldPtr);
     }
     else {
@@ -54,7 +57,7 @@ class Array {
     }
 
     if (this.length >= this._capacity) {
-      this._resize((this.length + 1) * this._sizeRatio);
+      this._resize(this._sizeRatio(this.length));
     }
 
     if (index !== this.length) {
@@ -84,21 +87,10 @@ class Array {
 
 const test = new Array();
 test.push(75);
-console.log(test.length, test._capacity);
 test.push(76);
-console.log(test.length, test._capacity);
 test.push(77);
-console.log(test.length, test._capacity);
-test.push(31);
-console.log(test.length, test._capacity);
-test.push(79);
-console.log(test.length, test._capacity);
-test.push(1);
-console.log(test.length, test._capacity);
-console.log(test.get(0));
-console.log('this should be 7', test.insert(1, 24));
-console.log(test.length, test._capacity);
-console.log(test.length, test._capacity);
+
+
 
 
 
