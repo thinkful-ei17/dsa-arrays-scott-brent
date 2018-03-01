@@ -27,7 +27,6 @@ class Memory {
       }
     } else {
       // Iterate backwards
-
       for (let i = size - 1; i >= 0; i--) {
         this.set(toIdx + i, this.get(fromIdx + i));
       }

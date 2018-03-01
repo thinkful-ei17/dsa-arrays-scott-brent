@@ -3,90 +3,102 @@ const Memory = require('./memory.js');
 const memory = new Memory;
 
 class Array {
-  constructor(){
+  constructor() {
+    this._sizeRatio = 2;
     this.length = 0;
     this._capacity = 0;
     this.ptr = memory.allocate(this.length);
   }
 
-  push(value){
-    // if current length + 1 >= capacity - 1, need to resize.
-    if (this.length + 1 >= this._capacity - 1){
-      this._resize(this.length + 1);
+  push(value) {
+    if (this.length >= this._capacity) {
+      this._resize((this.length + 1) * this._sizeRatio);
     }
-    //put our value at the end of the array
-    // assign value to ptr address + current length
-    memory.set(this.ptr + this.length, value);     
-    // set this.length = this.length++
+    memory.set(this.ptr + this.length, value); 
     this.length++;
-    // return this.length
     return this.length;
   }
    
-   
-  _resize(size){
+  _resize(size) {
     const oldPtr = this.ptr;
-    this.ptr = memory.allocate(size * 3);
+    this.ptr = memory.allocate(size);
     if (this.ptr !== null) { 
-        memory.copy(this.ptr, oldPtr, this.length);
-        this._capacity = size * 3;
-        memory.free(oldPtr)
+      memory.copy(this.ptr, oldPtr, this.length);
+      this._capacity = size * this._sizeRatio;
+      memory.free(oldPtr);
+    }
+    else {
+      throw new Error('Out of memory');
     }
   }
-   
-
-  get(index){
-    //check it's a valid index
-    const index2 = this.ptr + index;
-    if( index2 < this.ptr || index2 > this.ptr + this.length - 1){
-      return new Error('Not a valid index');
+  
+  get(index) {
+    if (index < 0 || index >= this.length) {
+      throw new Error('Index not found');
     }
-    //memory.get value at this.pointer + index
     return memory.get(this.ptr + index);
   }
 
-  pop(){
+  pop() {
+    if (this.length === 0) {
+      throw new Error('Nothing to pop');
+    }
     const poppedElement = this.get(this.length -1);
     this.length--;
     return poppedElement;
   }
 
-  insert(index, value){
-    //check that this.length + 1 is not greater this.capacity
-      //if it is, we call resize first
-    if (this.length + 1 >= this._capacity){
-        this._resize(this.length + 1);
-      }
-
-    if (index !== this.length){
-     //copy everything from the index forward one index with memory.copy
-        const oldIndex = this.ptr + index;
-        const newIndex = oldIndex + 1;
-        const size = this.length - index;
-        memory.copy(newIndex, oldIndex, size);
+  insert(index, value) {
+    if (index < 0 || index >= this.length) {
+      throw new Error('Index not found');
     }
-    //overwrite the index the new value
+
+    if (this.length >= this._capacity) {
+      this._resize((this.length + 1) * this._sizeRatio);
+    }
+
+    if (index !== this.length) {
+      const currentIndex = this.ptr + index;
+      const size = this.length - index;
+      memory.copy(currentIndex + 1, currentIndex, size);
+    }
     memory.set(this.ptr + index, value);
-    //increase length by one
     this.length++;
-    return this.length;
   }
 
-  remove(index){}
+  remove(index) {
+    if (index < 0 || index >= this.length) {
+      throw new Error('Index not found');
+    }
+    const currentIndex = this.ptr + index;
+    const size = this.length - index - 1;
+    memory.copy(currentIndex, currentIndex + 1, size);
+    this.length--;
+  }
 }
+
+
 
 
 
 
 const test = new Array();
 test.push(75);
+console.log(test.length, test._capacity);
 test.push(76);
+console.log(test.length, test._capacity);
 test.push(77);
-// test.push(31);
-// test.push(79);
-// test.push(1);
-console.log('this should be 4', test.insert(1, 24));
-console.log('should be 24', test.get(1));
+console.log(test.length, test._capacity);
+test.push(31);
+console.log(test.length, test._capacity);
+test.push(79);
+console.log(test.length, test._capacity);
+test.push(1);
+console.log(test.length, test._capacity);
+console.log(test.get(0));
+console.log('this should be 7', test.insert(1, 24));
+console.log(test.length, test._capacity);
+console.log(test.length, test._capacity);
 
 
 
